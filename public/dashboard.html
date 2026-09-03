@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Vantage Financial Alliance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f8f8f8; min-height: 100vh; }
+    nav { background: #fff; border-bottom: 1px solid #ebebeb; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    .nav-brand { font-size: 18px; font-weight: 700; color: #2c2c2c; }
+    .nav-brand span { color: #f7c547; }
+    .nav-user { display: flex; align-items: center; gap: 16px; }
+    .nav-user span { color: #888; font-size: 14px; }
+    .nav-btn { padding: 8px 16px; background: #2c2c2c; color: #fff; border: none; border-radius: 6px; font-size: 13px; cursor: pointer; font-family: inherit; }
+    .nav-btn:hover { background: #1a1a1a; }
+    .main { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    .welcome { background: #fff; border-radius: 16px; padding: 40px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+    .welcome h1 { font-size: 28px; color: #2c2c2c; margin-bottom: 8px; }
+    .welcome p { color: #888; font-size: 15px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .card { background: #fff; border-radius: 12px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+    .card-icon { width: 48px; height: 48px; background: #f7c547; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 16px; }
+    .card h3 { font-size: 16px; color: #2c2c2c; margin-bottom: 8px; }
+    .card p { font-size: 13px; color: #888; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">VANTAGE <span>FINANCIAL</span></div>
+    <div class="nav-user">
+      <span id="userName"></span>
+      <button class="nav-btn" onclick="logout()">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="welcome">
+      <h1>Welcome, <span id="displayName"></span></h1>
+      <p>This is your member dashboard. Access your account details and resources below.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>My Account</h3>
+        <p>View and manage your account settings and profile information.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📚</div>
+        <h3>Education</h3>
+        <p>Access training materials and resources to grow your knowledge.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🚀</div>
+        <h3>Get Started</h3>
+        <p>Begin your journey with Vantage and explore opportunities.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fetch user data
+    fetch('/api/user')
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          document.getElementById('userName').textContent = data.user.name;
+          document.getElementById('displayName').textContent = data.user.name;
+        }
+      })
+      .catch(() => { window.location.href = '/login'; });
+
+    async function logout() {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/login';
+    }
+  </script>
+</body>
+</html>
